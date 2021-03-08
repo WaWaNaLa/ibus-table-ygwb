@@ -1,0 +1,35 @@
+Name: 		ibus-table-ygwb
+Version: 	0.1
+Release: 	1
+Summary: 	The wubi Chinese input method for IBus
+License: 	GPLv2+
+Group:		System Environment/Libraries
+URL:		https://gitee.com/wawanala/ibus-table-ygwb
+BuildArch:      noarch
+Requires:       ibus-table >= 1.1
+Group: Applications/Text
+Source0:%{name}-%{version}-%{release}.tar.gz
+%description
+Use ibus-table input method. 
+%prep
+tar zxvf %_sourcedir/%{name}-%{version}-%{release}.tar.gz -C %_builddir/
+%build
+cd $RPM_BUILD_DIR/ygwb
+%install
+cd $RPM_BUILD_DIR/ygwb
+mkdir -p %{buildroot}/usr/share/ibus-table/tables
+mkdir -p %{buildroot}/usr/share/ibus-table/icons
+install -p -m 644 data/ygwb.txt %{buildroot}/usr/share/ibus-table/tables/ygwb.txt
+install -p -m 644 icons/ygwb.svg %{buildroot}/usr/share/ibus-table/icons/ygwb.svg
+cd %{buildroot}/usr/share/ibus-table/tables
+sudo ibus-table-createdb -s ygwb.txt -n ygwb.db
+sudo ibus-table-createdb -i -n ygwb.db
+%clean
+rm -rf $RPM_BUILD_DIR/ygwb
+%files
+%defattr(-,root,root)
+/usr/share/ibus-table/tables/ygwb.db
+/usr/share/ibus-table/tables/ygwb.txt
+/usr/share/ibus-table/icons/ygwb.svg
+%doc $RPM_BUILD_DIR/ygwb/README
+%changelog
